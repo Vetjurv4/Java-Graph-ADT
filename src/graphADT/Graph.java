@@ -1,0 +1,218 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package graphADT;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
+
+/**
+ *
+ * @author LENOVO
+ */
+public class Graph {
+
+    private ArrayList<Vertex> vertices;
+    private ArrayList<Edge> edges;
+
+    /**
+     *
+     */
+    public Graph() {
+        vertices = new ArrayList<>();
+        edges = new ArrayList<>();
+    }
+
+    public boolean addVertex(Vertex vertex) {
+        //int size = vertices.size();
+        vertices.add(vertex);
+        return true;
+    }
+
+    public boolean addEdge(Vertex from, Vertex to, double distance) {
+        Edge edge = new Edge(from, to, distance);
+        if (from.getEdgeTo(to) != null) {
+            return false;
+        } else {
+            from.addEdge(edge);
+            to.addEdge(edge);
+            edges.add(edge);
+            return true;
+        }
+    }
+
+    public boolean addBiEdge(Vertex from, Vertex to, double distance) {
+        return addEdge(from, to, distance) && addEdge(to, from, distance);
+    }
+
+    public boolean removeVertex(Vertex source) {
+        if (!vertices.contains(source)) {
+            return false;
+        }
+
+        vertices.remove(source);
+
+        while (source.getOutgoing().size() > 0) {
+            Edge edge = (Edge) source.getOutgoing().get(0);
+            source.getOutgoing().remove(edge);
+            Vertex destination = edge.getTo();
+            destination.removeEdge(edge);
+            edges.remove(edge);
+        }
+
+        while (source.getIncoming().size() > 0) {
+            Edge edge = (Edge) source.getIncoming().get(0);
+            source.getIncoming().remove(edge);
+            Vertex opposite = edge.getFrom();
+            opposite.removeEdge(edge);
+        }
+        return true;
+    }
+
+    public boolean removeEdge(Vertex from, Vertex to) {
+        Edge edge = from.getEdgeTo(to);
+        if (edge == null) {
+            return false;
+        } else {
+            from.removeEdge(edge);
+            to.removeEdge(edge);
+            edges.remove(edge);
+            return true;
+        }
+    }
+
+    public void resetVisitedVertices() {
+        for (int i = 0; i < vertices.size(); i++) {
+            Vertex vertex = (Vertex) vertices.get(i);
+            vertex.setVisited(false);
+        }
+    }
+
+    public void resetVisitedEdges() {
+        for (int i = 0; i < edges.size(); i++) {
+            Edge edge = (Edge) edges.get(i);
+            edge.setVisited(false);
+        }
+    }
+
+    public void DFS(Vertex vertex) {
+        for (int i = 0; i < vertex.numEdges(); i++) {
+            Edge edge = (Edge) vertex.getOutgoingEdge(i);
+            if (!edge.getTo().isVisited()) {
+                edge.getTo().setVisited(true);
+                DFS(edge.getTo());
+            }
+        }
+    }
+
+    public void StackDFS(Vertex vertex) {
+        Stack stack = new Stack();
+        stack.push(vertex);
+        vertex.setVisited(true);
+        while (!stack.isEmpty()) {
+            Edge edge = null;
+            boolean found = false;
+
+            vertex = (Vertex) stack.peek();
+            for (int i = 0; i < vertex.numEdges(); i++) {
+                edge = (Edge) vertex.getOutgoingEdge(i);
+                if (!edge.getTo().isVisited()) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                stack.pop();
+            } else {
+                stack.push(edge.getTo());
+                edge.getTo().setVisited(true);
+            }
+        }
+    }
+
+    public void BFS(Vertex vertex) {
+        Queue<Vertex> q = new LinkedList<Vertex>();
+        q.add(vertex);
+        vertex.setVisited(true);
+        while (!q.isEmpty()) {
+            vertex = (Vertex) q.remove();
+            for (int i = 0; i < vertex.numEdges(); i++) {
+                Edge edge = (Edge) vertex.getIncoming(i);
+                if (!edge.getTo().isVisited()) {
+                    q.add(edge.getTo());
+                    edge.getTo().setVisited(true);
+                }
+            }
+        }
+    }
+
+    public void TopologicalSort() {
+        while (vertices.size() > 0) {
+            boolean found = false;
+
+            for (int i = 0; i < vertices.size(); i++) {
+                Vertex vertex = (Vertex) vertices.get(i);
+
+                if (vertex.getIncoming().size() == 0) {
+                    found = true;
+                    System.out.println(vertex.getName());
+                    removeVertex(vertex);
+                    break;
+                }
+            }
+            if (!found) {
+                System.out.println("Loop in graph");
+                //display
+                return;
+            }
+        }
+    }
+
+    public void DFSTree(Vertex vertex) {
+        vertex.setVisited(true);
+        for (int i = 0; i < vertex.numEdges(); i++) {
+            Edge edge = (Edge) vertex.getIncoming(i);
+            if (!edge.getTo().isVisited()) {
+                System.out.println(" " + vertex.getName() + " " + edge.getTo().getName());
+                edge.setVisited(true);
+                DFSTree(edge.getTo());
+            }
+        }
+    }
+
+   
+    public Vertex getVertex(String name) {
+        for (int i = 0; i < vertices.size(); i++) {
+            Vertex vertex = (Vertex) vertices.get(i);
+            if (vertex.getName().equals(name));
+            {
+                return vertex;
+            }
+        }
+        return null;
+    }
+
+    public boolean isEmpty() {
+        return (vertices.size() == 0);
+    }
+
+    // Display a graphy
+    public void display() {
+        if (vertices.size() == 0) {
+            System.out.println("empty graph\n");
+            return;
+        }
+
+        System.out.println("");
+        for (int i = 0; i < vertices.size(); i++) {
+            Vertex v = (Vertex) vertices.get(i);
+            v.display();
+        }
+        System.out.println("");
+    }
+
+}
