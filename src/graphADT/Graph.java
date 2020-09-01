@@ -27,12 +27,24 @@ public class Graph {
         edges = new ArrayList<>();
     }
 
+    /**
+     * 
+     * @param vertex
+     * @return 
+     */
     public boolean addVertex(Vertex vertex) {
         //int size = vertices.size();
         vertices.add(vertex);
         return true;
     }
 
+    /**
+     * 
+     * @param from
+     * @param to
+     * @param distance
+     * @return 
+     */
     public boolean addEdge(Vertex from, Vertex to, double distance) {
         Edge edge = new Edge(from, to, distance);
         if (from.getEdgeTo(to) != null) {
@@ -45,10 +57,22 @@ public class Graph {
         }
     }
 
+    /**
+     * 
+     * @param from
+     * @param to
+     * @param distance
+     * @return 
+     */
     public boolean addBiEdge(Vertex from, Vertex to, double distance) {
         return addEdge(from, to, distance) && addEdge(to, from, distance);
     }
 
+    /**
+     * 
+     * @param source
+     * @return 
+     */
     public boolean removeVertex(Vertex source) {
         if (!vertices.contains(source)) {
             return false;
@@ -73,6 +97,12 @@ public class Graph {
         return true;
     }
 
+    /**
+     * 
+     * @param from
+     * @param to
+     * @return 
+     */
     public boolean removeEdge(Vertex from, Vertex to) {
         Edge edge = from.getEdgeTo(to);
         if (edge == null) {
@@ -85,6 +115,9 @@ public class Graph {
         }
     }
 
+    /**
+     * 
+     */
     public void resetVisitedVertices() {
         for (int i = 0; i < vertices.size(); i++) {
             Vertex vertex = (Vertex) vertices.get(i);
@@ -92,6 +125,9 @@ public class Graph {
         }
     }
 
+    /**
+     * 
+     */
     public void resetVisitedEdges() {
         for (int i = 0; i < edges.size(); i++) {
             Edge edge = (Edge) edges.get(i);
@@ -99,6 +135,10 @@ public class Graph {
         }
     }
 
+    /**
+     * 
+     * @param vertex 
+     */
     public void DFS(Vertex vertex) {
         for (int i = 0; i < vertex.numEdges(); i++) {
             Edge edge = (Edge) vertex.getOutgoingEdge(i);
@@ -108,7 +148,10 @@ public class Graph {
             }
         }
     }
-
+    /**
+     * 
+     * @param vertex 
+     */
     public void StackDFS(Vertex vertex) {
         Stack stack = new Stack();
         stack.push(vertex);
@@ -134,6 +177,10 @@ public class Graph {
         }
     }
 
+    /**
+     * 
+     * @param vertex 
+     */
     public void BFS(Vertex vertex) {
         Queue<Vertex> q = new LinkedList<Vertex>();
         q.add(vertex);
@@ -150,6 +197,9 @@ public class Graph {
         }
     }
 
+    /**
+     * 
+     */
     public void TopologicalSort() {
         while (vertices.size() > 0) {
             boolean found = false;
@@ -172,6 +222,10 @@ public class Graph {
         }
     }
 
+    /**
+     * 
+     * @param vertex 
+     */
     public void DFSTree(Vertex vertex) {
         vertex.setVisited(true);
         for (int i = 0; i < vertex.numEdges(); i++) {
@@ -184,7 +238,11 @@ public class Graph {
         }
     }
 
-   
+   /**
+    * 
+    * @param name
+    * @return 
+    */
     public Vertex getVertex(String name) {
         for (int i = 0; i < vertices.size(); i++) {
             Vertex vertex = (Vertex) vertices.get(i);
@@ -196,6 +254,10 @@ public class Graph {
         return null;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public boolean isEmpty() {
         return (vertices.size() == 0);
     }

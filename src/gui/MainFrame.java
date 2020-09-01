@@ -5,24 +5,32 @@
  */
 package gui;
 
+import graphADT.Graph;
+import graphADT.Vertex;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
  *
- * @author LENOVO
+ * @author Velile
  */
 public class MainFrame extends JFrame {
+
+    Graph map = new Graph();
+    ArrayList<Vertex> places = new ArrayList<Vertex>();
 
     public MainFrame() {
         //set frame properties
@@ -36,7 +44,7 @@ public class MainFrame extends JFrame {
         JMenuItem openFile = new JMenuItem("import map");
         JMenuItem addPlace = new JMenuItem("Add Place");
         JMenuItem exitItem = new JMenuItem("Exit");
-        
+
         //set onclick for importing map places
         openFile.addActionListener(new ActionListener() {
             @Override
@@ -67,7 +75,15 @@ public class MainFrame extends JFrame {
                 //Longitude
                 JLabel lblLongitude = new JLabel("Longitude:");
                 JTextField txtLongitude = new JTextField();
-                
+                //Destination Place
+                JLabel lblDestPlace = new JLabel("Connected to:");
+                String[] neighbours = new String[places.size()];
+                for (int i = 0; i < neighbours.length; i++) {
+                    neighbours[i] = places.get(i).getName();
+                }
+                JComboBox<String> cmbNeighbours = new JComboBox<>(neighbours);
+                cmbNeighbours.setEditable(false);
+
                 //add components to the panel
                 inputPanel.add(lblPlace);
                 inputPanel.add(txtPlace);
@@ -75,20 +91,41 @@ public class MainFrame extends JFrame {
                 inputPanel.add(txtLatitude);
                 inputPanel.add(lblLongitude);
                 inputPanel.add(txtLongitude);
-                
-                //do something
+                inputPanel.add(lblDestPlace);
+                inputPanel.add(cmbNeighbours);
+
+                String[] buttons = {"Add Place", "Cancel"};
+                int option = JOptionPane.showOptionDialog(null, inputPanel, "Add place to map:", JOptionPane.WARNING_MESSAGE, 0, null, buttons, buttons[1]);
+                if (option == 0) {
+
+                    //create place
+                    Vertex place = new Vertex(txtPlace.getText(), Float.parseFloat(txtLatitude.getText()), Float.parseFloat(txtLongitude.getText()));
+
+                    if (cmbNeighbours.getSelectedItem() != null) {
+                        //connect place to it destination
+                        Vertex dest = map.getVertex((String) cmbNeighbours.getSelectedItem());//find destination using name
+                        map.addBiEdge(place, dest, getDistance(place.getLat(), place.getLon(), dest.getLat(), dest.getLon()));
+                    } else {
+                        map.addVertex(place);
+                    }
+                    JOptionPane.showMessageDialog(null, "Place successfully added...\nView your place from the map");
+                }
             }
 
         });
-        
+
         //set items to the file menu
         fileMenu.add(openFile);
         fileMenu.add(addPlace);
         fileMenu.add(exitItem);
         menuBar.add(fileMenu); //add filemenu to the menu bar
-        setJMenuBar(menuBar); 
-        
+        setJMenuBar(menuBar);
+
         //show map
+    }
+
+    private float getDistance(float x1, float y1, float x2, float y2) {
+        return (float) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
 
 }

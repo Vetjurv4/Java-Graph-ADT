@@ -17,25 +17,31 @@ public class Vertex {
     private ArrayList<Edge> incoming;
     private String name;
     private boolean visited;
+    private float lat;
+    private float lon;
 
     /**
      *
      * @param name
      */
-    public Vertex(String name) {
+    public Vertex(String name, float lat, float lon) {
         outgoing = new ArrayList<>();
         incoming = new ArrayList<>();
         this.name = name;
+        this.lat = lat;
+        this.lon = lon;
         this.visited = false;
     }
 
     /**
      *
      */
-    public Vertex() {
+    public Vertex(float lat, float lon) {
         outgoing = new ArrayList<>();
         incoming = new ArrayList<>();
         this.name = "";
+        this.lat = lat;
+        this.lon = lon;
         this.visited = false;
     }
 
@@ -215,8 +221,44 @@ public class Vertex {
         System.out.println("");
     }
 
+    /**
+     * 
+     * @return 
+     */
     public String toString() {
         return "";
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+     public float getLat() {
+        return lat;
+    }
+
+     /**
+      * 
+      * @param lat 
+      */
+    public void setLat(float lat) {
+        this.lat = lat;
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    public float getLon() {
+        return lon;
+    }
+
+    /**
+     * 
+     * @param lon 
+     */
+    public void setLon(float lon) {
+        this.lon = lon;
     }
 
 }

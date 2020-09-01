@@ -1,14 +1,14 @@
 
 import graphADT.Graph;
 import graphADT.Vertex;
+import gui.MainFrame;
+import javax.swing.JFrame;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
 /**
  *
  * @author LENOVO
@@ -22,7 +22,7 @@ public class JavaGraphADT {
         // TODO code application logic here
         Graph example = new Graph();
 
-        Vertex wd = new Vertex("westdene");
+      /**  Vertex wd = new Vertex("westdene");
         Vertex ap = new Vertex("Auckland Park");
         Vertex braam = new Vertex("Braamfontein");
         Vertex park = new Vertex("Parktown");
@@ -95,7 +95,13 @@ public class JavaGraphADT {
 /////////////////////////////////////
         System.out.println("\nCompute Minimal Spanning Tree from Brixton.  Graph:");
         example.display();
-//example.Prim(wd);
+//example.Prim(wd); **/
+
+        MainFrame frame = new MainFrame();
+        frame.setSize(900, 700);
+        frame.setLocationRelativeTo(null); //center frame
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
 
     }
 
