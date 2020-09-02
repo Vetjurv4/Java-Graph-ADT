@@ -6,6 +6,7 @@
 package graphADT;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -19,7 +20,23 @@ public class Vertex {
     private boolean visited;
     private float lat;
     private float lon;
+    
+    /**
+     * Regex check
+     */
+    
+     //basic pattern "\\w+\\s\\d.d\\s\\d.d\\?w+
+    private static final Pattern VERTEX_PATTERN = Pattern.compile("([A-Z,a-z]+(\\-[A-Z,a-z]*)?)+\\s[0-9]+\\.[0-9]+\\s[0-9]*\\.[0-9]+\\s([A-Z,a-z]+(\\-[A-Z,a-z]*)?)+");
+     /**
+     *
+     * @param data
+     * @return
+     */
+    public static boolean isValid(String data) {
+        return VERTEX_PATTERN.matcher(data).matches();
+    }
 
+    
     /**
      *
      * @param name

@@ -5,6 +5,8 @@
  */
 package graphADT;
 
+import java.util.regex.Pattern;
+
 /**
  *
  * @author LENOVO
@@ -13,24 +15,34 @@ public class Edge {
 
     private Vertex from;
     private Vertex to;
-    private double distance;
+    private float distance;
     private boolean visited;
 
+    private static final Pattern EDGE_PATTERN = Pattern.compile("([A-Z, a-z]+(\\-[A-Z, a-z])*)+\\s([A-Z, a-z]+(\\-[A-Z, a-z])*)+");
+
     /**
-     * 
+     *
+     * @param data
+     * @return
+     */
+    public static boolean isValid(String data) {
+        return EDGE_PATTERN.matcher(data).matches();
+    }
+
+    /**
+     *
      * @param from
      * @param to
-     * @param distance 
      */
-    public Edge(Vertex from, Vertex to, double distance) {
+    public Edge(Vertex from, Vertex to) {
         this.from = from;
         this.to = to;
-        this.distance = distance;
+        this.distance = Graph.getDistance(from.getLat(), from.getLon(), to.getLat(), to.getLon());
         this.visited = false;
     }
 
     /**
-     * 
+     *
      * @return way from
      */
     public Vertex getFrom() {
@@ -38,64 +50,64 @@ public class Edge {
     }
 
     /**
-     * 
-     * @param from 
+     *
+     * @param from
      */
     public void setFrom(Vertex from) {
         this.from = from;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public Vertex getTo() {
         return to;
     }
 
     /**
-     * 
-     * @param to 
+     *
+     * @param to
      */
     public void setTo(Vertex to) {
         this.to = to;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public double getDistance() {
         return distance;
     }
 
     /**
-     * 
-     * @param distance 
+     *
+     * @param distance
      */
-    public void setDistance(double distance) {
+    public void setDistance(float distance) {
         this.distance = distance;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isVisited() {
         return visited;
     }
 
     /**
-     * 
-     * @param visited 
+     *
+     * @param visited
      */
     public void setVisited(boolean visited) {
         this.visited = visited;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String toString() {
         return "";//System.out.println("edge from " + from.getName() + " to " + to.getName() +  " distance " + distance);

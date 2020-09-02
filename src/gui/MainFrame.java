@@ -104,7 +104,7 @@ public class MainFrame extends JFrame {
                     if (cmbNeighbours.getSelectedItem() != null) {
                         //connect place to it destination
                         Vertex dest = map.getVertex((String) cmbNeighbours.getSelectedItem());//find destination using name
-                        map.addBiEdge(place, dest, getDistance(place.getLat(), place.getLon(), dest.getLat(), dest.getLon()));
+                        map.addBiEdge(place, dest, Graph.getDistance(place.getLat(), place.getLon(), dest.getLat(), dest.getLon()));
                     } else {
                         map.addVertex(place);
                     }
@@ -122,10 +122,6 @@ public class MainFrame extends JFrame {
         setJMenuBar(menuBar);
 
         //show map
-    }
-
-    private float getDistance(float x1, float y1, float x2, float y2) {
-        return (float) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
 
 }

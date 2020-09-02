@@ -12,7 +12,7 @@ import java.util.Stack;
 
 /**
  *
- * @author LENOVO
+ * @author Velile
  */
 public class Graph {
 
@@ -45,8 +45,8 @@ public class Graph {
      * @param distance
      * @return 
      */
-    public boolean addEdge(Vertex from, Vertex to, double distance) {
-        Edge edge = new Edge(from, to, distance);
+    public boolean addEdge(Vertex from, Vertex to) {
+        Edge edge = new Edge(from, to);
         if (from.getEdgeTo(to) != null) {
             return false;
         } else {
@@ -61,11 +61,10 @@ public class Graph {
      * 
      * @param from
      * @param to
-     * @param distance
      * @return 
      */
-    public boolean addBiEdge(Vertex from, Vertex to, double distance) {
-        return addEdge(from, to, distance) && addEdge(to, from, distance);
+    public boolean addBiEdge(Vertex from, Vertex to) {
+        return addEdge(from, to) && addEdge(to, from);
     }
 
     /**
@@ -275,6 +274,50 @@ public class Graph {
             v.display();
         }
         System.out.println("");
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+     public ArrayList<Vertex> getVertices() {
+        return vertices;
+    }
+
+     /**
+      * 
+      * @param vertices 
+      */
+    public void setVertices(ArrayList<Vertex> vertices) {
+        this.vertices = vertices;
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    public ArrayList<Edge> getEdges() {
+        return edges;
+    }
+
+    /**
+     * 
+     * @param edges 
+     */
+    public void setEdges(ArrayList<Edge> edges) {
+        this.edges = edges;
+    }
+    
+    /**
+     * 
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @return distance
+     */
+    public static float getDistance(float x1, float y1, float x2, float y2) {
+        return (float) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
 
 }
