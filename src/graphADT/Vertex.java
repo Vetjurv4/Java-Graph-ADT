@@ -20,23 +20,13 @@ public class Vertex {
     private boolean visited;
     private float lat;
     private float lon;
-    
+
     /**
      * Regex check
      */
-    
-     //basic pattern "\\w+\\s\\d.d\\s\\d.d\\?w+
-    private static final Pattern VERTEX_PATTERN = Pattern.compile("([A-Z,a-z]+(\\-[A-Z,a-z]*)?)+\\s[0-9]+\\.[0-9]+\\s[0-9]*\\.[0-9]+\\s([A-Z,a-z]+(\\-[A-Z,a-z]*)?)+");
-     /**
-     *
-     * @param data
-     * @return
-     */
-    public static boolean isValid(String data) {
-        return VERTEX_PATTERN.matcher(data).matches();
-    }
+    //basic pattern "\\w+\\s\\d.d\\s\\d.d\\?w+
+    private static final Pattern VERTEX_PATTERN = Pattern.compile("([A-Z,a-z]+(\\-[A-Z,a-z]*)?)+\\s[0-9]+\\.[0-9]+\\s[0-9]*\\.[0-9]+");
 
-    
     /**
      *
      * @param name
@@ -52,14 +42,11 @@ public class Vertex {
 
     /**
      *
+     * @param data
+     * @return
      */
-    public Vertex(float lat, float lon) {
-        outgoing = new ArrayList<>();
-        incoming = new ArrayList<>();
-        this.name = "";
-        this.lat = lat;
-        this.lon = lon;
-        this.visited = false;
+    public static boolean isValid(String data) {
+        return VERTEX_PATTERN.matcher(data).matches();
     }
 
     /**
@@ -239,40 +226,40 @@ public class Vertex {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String toString() {
         return "";
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
-     public float getLat() {
+    public float getLat() {
         return lat;
     }
 
-     /**
-      * 
-      * @param lat 
-      */
+    /**
+     *
+     * @param lat
+     */
     public void setLat(float lat) {
         this.lat = lat;
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public float getLon() {
         return lon;
     }
 
     /**
-     * 
-     * @param lon 
+     *
+     * @param lon
      */
     public void setLon(float lon) {
         this.lon = lon;

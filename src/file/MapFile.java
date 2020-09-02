@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.StringTokenizer;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -29,13 +30,13 @@ public class MapFile {
     public static Graph readMap(String filename) {
         //
         Graph map = new Graph();
-        ArrayList<String> upcomingPlaces = new ArrayList<>();
         File mapFile = new File(filename);
         if (!mapFile.exists()) {
             return map;
         }
 
         Scanner mapScanner = null;
+        ArrayList<String> laterAdded = new ArrayList<>();
         try {
             mapScanner = new Scanner(mapFile); //read map file
             while (mapScanner.hasNext()) {
@@ -47,37 +48,26 @@ public class MapFile {
                     String place = vertexTokens.nextToken();
                     float latitude = Float.parseFloat(vertexTokens.nextToken());
                     float longitude = Float.parseFloat(vertexTokens.nextToken());
-                    String dest = vertexTokens.nextToken();
-                    
+
                     //read new place (vertex)
                     Vertex newPlace = new Vertex(place, latitude, longitude);
-                    //add place to map
-                    if (dest.equals("")) {
-                        map.addVertex(newPlace);
-                    } else {
-                        //connected places
-                        Vertex destPlace = map.getVertex(dest);
-                        //destination not yet read from file
-                        if (destPlace == null) {
-                            //if not already noted
-                            if (!upcomingPlaces.contains(dest)) {
-                                upcomingPlaces.add(dest);
-                            }
-                        } else {
-                            map.addBiEdge(newPlace, destPlace);
-                        }
-                    }
-                }else if(Edge.isValid(line)){ //FROM_VERTEX_NAME TO_VERTEX_NAME DISTANCE
+                    map.addVertex(newPlace);
+                } else if (Edge.isValid(line)) { //FROM_VERTEX_NAME TO_VERTEX_NAME DISTANCE
                     //read Edge from file
                     StringTokenizer edgeTokens = new StringTokenizer(line);
-                    String from = edgeTokens.nextToken();
-                    String to = edgeTokens.nextToken();
-                    
-                    Vertex vertexFrom = map.getVertex(from);
-                    Vertex vertexTo = map.getVertex(to);
-                    
-                }else{
-                    System.out.println("Error could not validate line");
+                    String strFrom = edgeTokens.nextToken();
+                    String strTo = edgeTokens.nextToken();
+
+                    //find to and from vertex
+                    Vertex from = map.getVertex(strFrom);
+                    Vertex to = map.getVertex(strTo);
+                    //
+                    if (from != null && to != null) {
+                        map.addBiEdge(from, to);
+                    }
+
+                } else {
+                    System.out.println("Error could not validate line: " + line);
                 }
             }
         } catch (FileNotFoundException ex) {
@@ -87,10 +77,14 @@ public class MapFile {
                 mapScanner.close();
             }
         }
-
         return map;
     }
 
+    /**
+     *
+     * @param map
+     * @param mapName
+     */
     public static void writeToMap(Graph map, String mapName) {
         if (map != null) {
             //write new place to map file
@@ -99,12 +93,20 @@ public class MapFile {
             try {
                 mapWriter = new PrintWriter(mapFile);
 
-                //write map
+                //write map 
                 for (int i = 0; i < map.getVertices().size(); i++) {
-                    if (map.getVertices().get(i).getOutgoing().size() > 0) {
-                        for (int j = 0; j < map.getVertices().get(i).getOutgoing().size(); j++) {
-
-                        }
+                    //write vertex
+                    Vertex tempVertex = map.getVertices().get(i);
+                    mapWriter.println(tempVertex.getName() + " " + tempVertex.getLat() + " " + tempVertex.getLon());
+                    //write outgoing edges
+                    for(int j = 0; j < tempVertex.getOutgoing().size(); j++){
+                        Edge tempOutgoing = tempVertex.getOutgoingEdge(i);
+                        mapWriter.println(tempOutgoing.getFrom().getName()+" "+tempOutgoing.getTo().getName());
+                    }
+                    //write incoming edges
+                    for(int k = 0; k < tempVertex.getIncoming().size(); k++){
+                        Edge tempIncoming = tempVertex.getIncoming(k);
+                        mapWriter.println(tempIncoming.getFrom().getName()+" "+tempIncoming.getTo().getName());
                     }
                 }
             } catch (FileNotFoundException ex) {
@@ -118,4 +120,9 @@ public class MapFile {
 
     }
 
+    public static void deleteMap(String filename){
+        File deleteFile = new File("data\\"+ filename+".txt");
+        deleteFile.delete();
+        JOptionPane.showMessageDialog(null, "Deleted: "+filename);
+    }
 }

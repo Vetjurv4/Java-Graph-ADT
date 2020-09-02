@@ -47,8 +47,8 @@ public class Graph {
      */
     public boolean addEdge(Vertex from, Vertex to) {
         Edge edge = new Edge(from, to);
-        if (from.getEdgeTo(to) != null) {
-            return false;
+        if (from.getEdgeTo(to) != null) { 
+            return false; //alread have a connecting edge
         } else {
             from.addEdge(edge);
             to.addEdge(edge);

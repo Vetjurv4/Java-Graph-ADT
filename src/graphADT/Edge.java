@@ -20,6 +20,20 @@ public class Edge {
 
     private static final Pattern EDGE_PATTERN = Pattern.compile("([A-Z, a-z]+(\\-[A-Z, a-z])*)+\\s([A-Z, a-z]+(\\-[A-Z, a-z])*)+");
 
+    
+    /**
+     *
+     * @param from
+     * @param to
+     */
+    public Edge(Vertex from, Vertex to) {
+        this.from = from;
+        this.to = to;
+        //if one of the vertices is null set distance to zero
+        this.distance = (from == null || to == null)? 0: Graph.getDistance(from.getLat(), from.getLon(), to.getLat(), to.getLon());
+        this.visited = false;
+    }
+    
     /**
      *
      * @param data
@@ -29,17 +43,6 @@ public class Edge {
         return EDGE_PATTERN.matcher(data).matches();
     }
 
-    /**
-     *
-     * @param from
-     * @param to
-     */
-    public Edge(Vertex from, Vertex to) {
-        this.from = from;
-        this.to = to;
-        this.distance = Graph.getDistance(from.getLat(), from.getLon(), to.getLat(), to.getLon());
-        this.visited = false;
-    }
 
     /**
      *
