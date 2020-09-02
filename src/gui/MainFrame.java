@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package gui;
-
+import file.MapFile;
 import graphADT.Graph;
 import graphADT.Vertex;
 import java.awt.BorderLayout;
@@ -27,10 +27,11 @@ import javax.swing.JTextField;
  *
  * @author Velile
  */
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame{
 
-    Graph map = new Graph();
     ArrayList<Vertex> places = new ArrayList<Vertex>();
+    Graph map = null;
+    //MapWindow frame = new MapWindow();
 
     public MainFrame() {
         //set frame properties
@@ -44,7 +45,8 @@ public class MainFrame extends JFrame {
         JMenuItem openFile = new JMenuItem("import map");
         JMenuItem addPlace = new JMenuItem("Add Place");
         JMenuItem exitItem = new JMenuItem("Exit");
-
+        //
+        JPanel mapView = new JPanel();
         //set onclick for importing map places
         openFile.addActionListener(new ActionListener() {
             @Override
@@ -55,7 +57,9 @@ public class MainFrame extends JFrame {
                 //check file
                 switch (result) {
                     case JFileChooser.APPROVE_OPTION:
-                    //read coordinates to the map
+                        //read coordinates to the map
+                        map = MapFile.readMap(mapChooser.getSelectedFile().getAbsolutePath());
+
                 }
             }
         });
@@ -104,7 +108,7 @@ public class MainFrame extends JFrame {
                     if (cmbNeighbours.getSelectedItem() != null) {
                         //connect place to it destination
                         Vertex dest = map.getVertex((String) cmbNeighbours.getSelectedItem());//find destination using name
-                        map.addBiEdge(place, dest, Graph.getDistance(place.getLat(), place.getLon(), dest.getLat(), dest.getLon()));
+                        map.addBiEdge(place, dest);
                     } else {
                         map.addVertex(place);
                     }
@@ -120,8 +124,7 @@ public class MainFrame extends JFrame {
         fileMenu.add(exitItem);
         menuBar.add(fileMenu); //add filemenu to the menu bar
         setJMenuBar(menuBar);
-
-        //show map
+        pack();
     }
 
 }
