@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
+import map.Point;
 
 /**
  *
@@ -16,7 +17,7 @@ import java.util.Stack;
  */
 public class Graph {
 
-    private ArrayList<Vertex> vertices;
+    private ArrayList<Point> vertices;
     private ArrayList<Edge> edges;
 
     /**
@@ -32,7 +33,7 @@ public class Graph {
      * @param vertex
      * @return 
      */
-    public boolean addVertex(Vertex vertex) {
+    public boolean addVertex(Point vertex) {
         //int size = vertices.size();
         vertices.add(vertex);
         return true;
@@ -45,7 +46,7 @@ public class Graph {
      * @param distance
      * @return 
      */
-    public boolean addEdge(Vertex from, Vertex to) {
+    public boolean addEdge(Point from, Point to) {
         Edge edge = new Edge(from, to);
         if (from.getEdgeTo(to) != null) { 
             return false; //alread have a connecting edge
@@ -63,7 +64,7 @@ public class Graph {
      * @param to
      * @return 
      */
-    public boolean addBiEdge(Vertex from, Vertex to) {
+    public boolean addBiEdge(Point from, Point to) {
         return addEdge(from, to) && addEdge(to, from);
     }
 
@@ -72,7 +73,7 @@ public class Graph {
      * @param source
      * @return 
      */
-    public boolean removeVertex(Vertex source) {
+    public boolean removeVertex(Point source) {
         if (!vertices.contains(source)) {
             return false;
         }
@@ -82,7 +83,7 @@ public class Graph {
         while (source.getOutgoing().size() > 0) {
             Edge edge = (Edge) source.getOutgoing().get(0);
             source.getOutgoing().remove(edge);
-            Vertex destination = edge.getTo();
+            Point destination = edge.getTo();
             destination.removeEdge(edge);
             edges.remove(edge);
         }
@@ -90,7 +91,7 @@ public class Graph {
         while (source.getIncoming().size() > 0) {
             Edge edge = (Edge) source.getIncoming().get(0);
             source.getIncoming().remove(edge);
-            Vertex opposite = edge.getFrom();
+            Point opposite = edge.getFrom();
             opposite.removeEdge(edge);
         }
         return true;
@@ -102,7 +103,7 @@ public class Graph {
      * @param to
      * @return 
      */
-    public boolean removeEdge(Vertex from, Vertex to) {
+    public boolean removeEdge(Point from, Point to) {
         Edge edge = from.getEdgeTo(to);
         if (edge == null) {
             return false;
@@ -119,7 +120,7 @@ public class Graph {
      */
     public void resetVisitedVertices() {
         for (int i = 0; i < vertices.size(); i++) {
-            Vertex vertex = (Vertex) vertices.get(i);
+            Point vertex = (Point) vertices.get(i);
             vertex.setVisited(false);
         }
     }
@@ -138,7 +139,7 @@ public class Graph {
      * 
      * @param vertex 
      */
-    public void DFS(Vertex vertex) {
+    public void DFS(Point vertex) {
         for (int i = 0; i < vertex.numEdges(); i++) {
             Edge edge = (Edge) vertex.getOutgoingEdge(i);
             if (!edge.getTo().isVisited()) {
@@ -151,7 +152,7 @@ public class Graph {
      * 
      * @param vertex 
      */
-    public void StackDFS(Vertex vertex) {
+    public void StackDFS(Point vertex) {
         Stack stack = new Stack();
         stack.push(vertex);
         vertex.setVisited(true);
@@ -159,7 +160,7 @@ public class Graph {
             Edge edge = null;
             boolean found = false;
 
-            vertex = (Vertex) stack.peek();
+            vertex = (Point) stack.peek();
             for (int i = 0; i < vertex.numEdges(); i++) {
                 edge = (Edge) vertex.getOutgoingEdge(i);
                 if (!edge.getTo().isVisited()) {
@@ -180,12 +181,12 @@ public class Graph {
      * 
      * @param vertex 
      */
-    public void BFS(Vertex vertex) {
-        Queue<Vertex> q = new LinkedList<Vertex>();
+    public void BFS(Point vertex) {
+        Queue<Point> q = new LinkedList<Point>();
         q.add(vertex);
         vertex.setVisited(true);
         while (!q.isEmpty()) {
-            vertex = (Vertex) q.remove();
+            vertex = (Point) q.remove();
             for (int i = 0; i < vertex.numEdges(); i++) {
                 Edge edge = (Edge) vertex.getIncoming(i);
                 if (!edge.getTo().isVisited()) {
@@ -204,7 +205,7 @@ public class Graph {
             boolean found = false;
 
             for (int i = 0; i < vertices.size(); i++) {
-                Vertex vertex = (Vertex) vertices.get(i);
+                Point vertex = (Point) vertices.get(i);
 
                 if (vertex.getIncoming().size() == 0) {
                     found = true;
@@ -225,7 +226,7 @@ public class Graph {
      * 
      * @param vertex 
      */
-    public void DFSTree(Vertex vertex) {
+    public void DFSTree(Point vertex) {
         vertex.setVisited(true);
         for (int i = 0; i < vertex.numEdges(); i++) {
             Edge edge = (Edge) vertex.getIncoming(i);
@@ -242,9 +243,9 @@ public class Graph {
     * @param name
     * @return 
     */
-    public Vertex getVertex(String name) {
+    public Point getVertex(String name) {
         for (int i = 0; i < vertices.size(); i++) {
-            Vertex vertex = (Vertex) vertices.get(i);
+            Point vertex = (Point) vertices.get(i);
             if (vertex.getName().equals(name));
             {
                 return vertex;
@@ -270,7 +271,7 @@ public class Graph {
 
         System.out.println("");
         for (int i = 0; i < vertices.size(); i++) {
-            Vertex v = (Vertex) vertices.get(i);
+            Point v = (Point) vertices.get(i);
             v.display();
         }
         System.out.println("");
@@ -280,7 +281,7 @@ public class Graph {
      * 
      * @return 
      */
-     public ArrayList<Vertex> getVertices() {
+     public ArrayList<Point> getVertices() {
         return vertices;
     }
 
@@ -288,7 +289,7 @@ public class Graph {
       * 
       * @param vertices 
       */
-    public void setVertices(ArrayList<Vertex> vertices) {
+    public void setVertices(ArrayList<Point> vertices) {
         this.vertices = vertices;
     }
 
@@ -308,16 +309,5 @@ public class Graph {
         this.edges = edges;
     }
     
-    /**
-     * 
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
-     * @return distance
-     */
-    public static float getDistance(float x1, float y1, float x2, float y2) {
-        return (float) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-    }
 
 }

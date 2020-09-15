@@ -18,20 +18,21 @@ public class Vertex {
     private ArrayList<Edge> incoming;
     private String name;
     private boolean visited;
-    private float lat;
-    private float lon;
+    private double lat;
+    private double lon;
 
     /**
      * Regex check
      */
     //basic pattern "\\w+\\s\\d.d\\s\\d.d\\?w+
-    private static final Pattern VERTEX_PATTERN = Pattern.compile("([A-Z,a-z]+(\\-[A-Z,a-z]*)?)+\\s[0-9]+\\.[0-9]+\\s[0-9]*\\.[0-9]+");
+    private static final Pattern VERTEX_PATTERN = Pattern.compile("([A-Z,a-z]+(\\-[A-Z,a-z]*)?)+\\s(-)?[0-9]+\\.[0-9]+\\s(-)?[0-9]*\\.[0-9]+");
+    
 
     /**
      *
      * @param name
      */
-    public Vertex(String name, float lat, float lon) {
+    public Vertex(String name, double lat, double lon) {
         outgoing = new ArrayList<>();
         incoming = new ArrayList<>();
         this.name = name;
@@ -237,7 +238,7 @@ public class Vertex {
      *
      * @return
      */
-    public float getLat() {
+    public double getLat() {
         return lat;
     }
 
@@ -245,7 +246,7 @@ public class Vertex {
      *
      * @param lat
      */
-    public void setLat(float lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
@@ -253,7 +254,7 @@ public class Vertex {
      *
      * @return
      */
-    public float getLon() {
+    public double getLon() {
         return lon;
     }
 
@@ -261,7 +262,7 @@ public class Vertex {
      *
      * @param lon
      */
-    public void setLon(float lon) {
+    public void setLon(double lon) {
         this.lon = lon;
     }
 

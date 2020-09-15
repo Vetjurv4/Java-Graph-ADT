@@ -1,6 +1,6 @@
-
 import graphADT.Graph;
 import gui.MainFrame;
+import java.awt.Color;
 import javax.swing.JFrame;
 
 /*
@@ -77,8 +77,9 @@ public class JavaGraphADT {
          */
         MainFrame frame = new MainFrame();
         frame.setSize(900, 700);
-        frame.setLocationRelativeTo(null); //center frame
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null); //center frame
+        frame.setBackground(Color.yellow);
         frame.setVisible(true);
 
     }

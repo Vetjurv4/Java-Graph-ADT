@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import javax.swing.JOptionPane;
+import map.Point;
 
 /**
  *
@@ -34,7 +35,7 @@ public class MapFile {
         if (!mapFile.exists()) {
             return map;
         }
-
+        Point prevPlace = null;
         Scanner mapScanner = null;
         ArrayList<String> laterAdded = new ArrayList<>();
         try {
@@ -42,16 +43,18 @@ public class MapFile {
             while (mapScanner.hasNext()) {
                 String line = mapScanner.nextLine(); //read each line in a file
 
-                if (Vertex.isValid(line)) { //PLACE_NAME LATITUDE LONGITUDE ?DEST_PLACE_NAME
+                if (Vertex.isValid(line)) { //PLACE_NAME LATITUDE LONGITUDE
                     //read map data from data
                     StringTokenizer vertexTokens = new StringTokenizer(line);
                     String place = vertexTokens.nextToken();
-                    float latitude = Float.parseFloat(vertexTokens.nextToken());
-                    float longitude = Float.parseFloat(vertexTokens.nextToken());
+                    double latitude = Double.parseDouble(vertexTokens.nextToken());
+                    double longitude = Double.parseDouble(vertexTokens.nextToken());
 
                     //read new place (vertex)
-                    Vertex newPlace = new Vertex(place, latitude, longitude);
+                    Point newPlace = new Point(place, latitude, longitude);
                     map.addVertex(newPlace);
+                    if(prevPlace != null) map.addEdge(newPlace, newPlace);
+				prevPlace = newPlace;
                 } else if (Edge.isValid(line)) { //FROM_VERTEX_NAME TO_VERTEX_NAME DISTANCE
                     //read Edge from file
                     StringTokenizer edgeTokens = new StringTokenizer(line);
@@ -59,8 +62,8 @@ public class MapFile {
                     String strTo = edgeTokens.nextToken();
 
                     //find to and from vertex
-                    Vertex from = map.getVertex(strFrom);
-                    Vertex to = map.getVertex(strTo);
+                    Point from = map.getVertex(strFrom);
+                    Point to = map.getVertex(strTo);
                     //
                     if (from != null && to != null) {
                         map.addBiEdge(from, to);

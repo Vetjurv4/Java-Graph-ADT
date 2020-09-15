@@ -5,7 +5,11 @@
  */
 package graphADT;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Stroke;
 import java.util.regex.Pattern;
+import map.Point;
 
 /**
  *
@@ -13,27 +17,36 @@ import java.util.regex.Pattern;
  */
 public class Edge {
 
-    private Vertex from;
-    private Vertex to;
-    private float distance;
+    private final static Stroke BASIC_STROKE = new BasicStroke();
+
+    private Point from;
+    private Point to;
+    private double distance;
     private boolean visited;
+    private Color color;
+    private Stroke stroke;
 
     private static final Pattern EDGE_PATTERN = Pattern.compile("([A-Z, a-z]+(\\-[A-Z, a-z])*)+\\s([A-Z, a-z]+(\\-[A-Z, a-z])*)+");
 
-    
     /**
      *
      * @param from
-     * @param to
+     * @param to 
      */
-    public Edge(Vertex from, Vertex to) {
+    public Edge(Point from, Point to) {
+        this(from, to, from.getLon()< 0 ? Color.BLUE : Color.RED, BASIC_STROKE);
+    }
+
+    public Edge(Point from, Point to, Color color, Stroke stroke) {
         this.from = from;
         this.to = to;
         //if one of the vertices is null set distance to zero
-        this.distance = (from == null || to == null)? 0: Graph.getDistance(from.getLat(), from.getLon(), to.getLat(), to.getLon());
+        this.distance = from.distanceTo(to);
         this.visited = false;
+        this.color = color;
+        this.stroke = stroke;
     }
-    
+
     /**
      *
      * @param data
@@ -43,12 +56,11 @@ public class Edge {
         return EDGE_PATTERN.matcher(data).matches();
     }
 
-
     /**
      *
      * @return way from
      */
-    public Vertex getFrom() {
+    public Point getFrom() {
         return from;
     }
 
@@ -56,7 +68,7 @@ public class Edge {
      *
      * @param from
      */
-    public void setFrom(Vertex from) {
+    public void setFrom(Point from) {
         this.from = from;
     }
 
@@ -64,7 +76,7 @@ public class Edge {
      *
      * @return
      */
-    public Vertex getTo() {
+    public Point getTo() {
         return to;
     }
 
@@ -72,7 +84,7 @@ public class Edge {
      *
      * @param to
      */
-    public void setTo(Vertex to) {
+    public void setTo(Point to) {
         this.to = to;
     }
 
@@ -88,7 +100,7 @@ public class Edge {
      *
      * @param distance
      */
-    public void setDistance(float distance) {
+    public void setDistance(double distance) {
         this.distance = distance;
     }
 
@@ -106,6 +118,22 @@ public class Edge {
      */
     public void setVisited(boolean visited) {
         this.visited = visited;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public Stroke getStroke() {
+        return stroke;
+    }
+
+    public void setStroke(Stroke stroke) {
+        this.stroke = stroke;
     }
 
     /**
